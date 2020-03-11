@@ -1,0 +1,2 @@
+# rez
+my first repository
