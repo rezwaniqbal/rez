@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Culture Fair III B Trainer</title>
+    <meta name="description" content="Interactive practice for Cattell Culture Fair III B: matrices, series, classification, analogies, number sequences" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">CF</div>
+          <div class="title">
+            <h1>Culture Fair III B Trainer</h1>
+            <p class="subtitle">Practice matrices, series, classification, analogies, and number sequences</p>
+          </div>
+        </div>
+        <nav class="top-nav" aria-label="Primary">
+          <button class="nav-btn" data-nav="practice" aria-pressed="true">Practice</button>
+          <button class="nav-btn" data-nav="learn">Rule Learning</button>
+          <button class="nav-btn" data-nav="exam">Exam Mode</button>
+          <button class="nav-btn" data-nav="about">About</button>
+        </nav>
+      </header>
+
+      <main id="view-container" class="view-container">
+        <!-- Practice View -->
+        <section id="practice-view" class="view active" aria-labelledby="practice-heading">
+          <div class="controls">
+            <div class="segmented" role="tablist" aria-label="Question type">
+              <button role="tab" class="seg-btn active" data-type="mixed">Mixed</button>
+              <button role="tab" class="seg-btn" data-type="matrix">Matrix</button>
+              <button role="tab" class="seg-btn" data-type="series">Series</button>
+              <button role="tab" class="seg-btn" data-type="classification">Classification</button>
+              <button role="tab" class="seg-btn" data-type="analogy">Analogies</button>
+              <button role="tab" class="seg-btn" data-type="numbers">Number Seq</button>
+            </div>
+            <div class="control-right">
+              <button id="btn-new" class="btn primary">New Question</button>
+              <div class="scorebox" aria-live="polite">
+                <span id="score-correct">0</span>/<span id="score-total">0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" role="group" aria-labelledby="practice-heading">
+            <h2 id="practice-heading" class="visually-hidden">Practice Question</h2>
+            <div class="prompt" id="question-prompt">Loading question…</div>
+            <div class="board" id="question-board" aria-label="Question board" tabindex="0"></div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback" aria-live="polite"></div>
+            <details id="explain" class="explain" open>
+              <summary>Explanation</summary>
+              <div id="explain-content"></div>
+              <div id="explain-anim" class="explain-anim" aria-hidden="true"></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Rule Learning View -->
+        <section id="learn-view" class="view" aria-labelledby="learn-heading">
+          <h2 id="learn-heading">Rule Learning Mode</h2>
+          <p class="muted">Learn the common rules used in Culture Fair style questions, with simple explanations and mini-exercises.</p>
+          <div class="learn-layout">
+            <aside class="learn-sidebar" aria-label="Rule list">
+              <ul id="rule-list" class="rule-list"></ul>
+            </aside>
+            <section class="learn-stage">
+              <div class="learn-card">
+                <h3 id="rule-title">Choose a rule</h3>
+                <p id="rule-desc" class="muted">Pick a rule on the left to see an animation and practice it.</p>
+                <div id="rule-stage" class="rule-stage"></div>
+                <div class="learn-actions">
+                  <button id="rule-prev" class="btn">Prev</button>
+                  <button id="rule-next" class="btn">Next</button>
+                  <button id="rule-practice" class="btn primary">Practice this rule</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- Exam Mode View -->
+        <section id="exam-view" class="view" aria-labelledby="exam-heading">
+          <h2 id="exam-heading">Exam Simulation</h2>
+          <div class="exam-setup">
+            <div class="setup-row">
+              <label>Number of questions</label>
+              <input id="exam-count" type="number" min="10" max="60" step="5" value="30" />
+            </div>
+            <div class="setup-row">
+              <label>Time limit (minutes)</label>
+              <input id="exam-minutes" type="number" min="5" max="60" step="5" value="12" />
+            </div>
+            <div class="setup-row">
+              <label>Types</label>
+              <div class="type-toggles">
+                <label><input type="checkbox" class="exam-type" data-type="matrix" checked /> Matrix</label>
+                <label><input type="checkbox" class="exam-type" data-type="series" checked /> Series</label>
+                <label><input type="checkbox" class="exam-type" data-type="classification" checked /> Classification</label>
+                <label><input type="checkbox" class="exam-type" data-type="analogy" checked /> Analogies</label>
+                <label><input type="checkbox" class="exam-type" data-type="numbers" checked /> Number Seq</label>
+              </div>
+            </div>
+            <button id="exam-start" class="btn primary">Start Exam</button>
+          </div>
+
+          <div id="exam-running" class="exam-running hidden">
+            <div class="exam-top">
+              <div class="exam-progress">
+                <span id="exam-current">1</span>/<span id="exam-total">30</span>
+              </div>
+              <div class="timer" id="exam-timer">12:00</div>
+            </div>
+            <div class="question-card">
+              <div class="prompt" id="exam-prompt">Question…</div>
+              <div class="board" id="exam-board"></div>
+              <div class="options" id="exam-options"></div>
+              <div class="feedback" id="exam-feedback"></div>
+              <details id="exam-explain" class="explain" open>
+                <summary>Explanation</summary>
+                <div id="exam-explain-content"></div>
+                <div id="exam-explain-anim" class="explain-anim"></div>
+              </details>
+              <div class="exam-actions">
+                <button id="exam-next" class="btn primary">Next</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="exam-results" class="exam-results hidden">
+            <h3>Your Results</h3>
+            <p><strong>Score:</strong> <span id="exam-score"></span></p>
+            <p><strong>Time taken:</strong> <span id="exam-time-taken"></span></p>
+            <div id="exam-breakdown"></div>
+            <button id="exam-retry" class="btn">Retry</button>
+          </div>
+        </section>
+
+        <!-- About View -->
+        <section id="about-view" class="view" aria-labelledby="about-heading">
+          <h2 id="about-heading">About</h2>
+          <p>This trainer provides mock and procedurally generated practice items inspired by Culture Fair III B patterns. It is not affiliated with any test publisher.</p>
+          <ul>
+            <li>Immediate feedback with simple explanations</li>
+            <li>Visual animations for common rules: rotation, reflection, alternation, progression, element add/remove, shading, numeric logic</li>
+            <li>Practice mode, rule learning mode, and timed exam simulation</li>
+            <li>Works offline in your browser. No sign-in, no data collection.</li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="left">
+          <span class="muted">Made for local practice</span>
+        </div>
+        <div class="right">
+          <button id="toggle-theme" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">🌓</button>
+        </div>
+      </footer>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
